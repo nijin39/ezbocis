@@ -20,15 +20,15 @@
         <text>EZBOCIS</text>
       </controlProperties>
     </control>
-    <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="69" y="157" w="-1" h="-1" measuredW="81" measuredH="36" zOrder="3" locked="false" isInGroup="-1">
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="69" y="157" w="-1" h="-1" measuredW="149" measuredH="36" zOrder="3" locked="false" isInGroup="-1">
       <controlProperties>
         <size>28</size>
-        <text>HOME</text>
+        <text>MYSERVER</text>
       </controlProperties>
     </control>
-    <control controlID="14" controlTypeID="com.balsamiq.mockups::DataGrid" x="217" y="253" w="930" h="408" measuredW="338" measuredH="81" zOrder="4" locked="false" isInGroup="-1">
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::DataGrid" x="217" y="253" w="930" h="408" measuredW="448" measuredH="51" zOrder="4" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>NO%2C%20Name%2C%20Type%2C%20Create%20By%2C%20Create%20Date%0A1%2CDisk%20Information%2Cbash%2CJong%20IL%2C2016/07/03%0A2%2CNetwork%20Status%2Cbash%2CJong%20IL%2C2016/07/03</text>
+        <text>NO%2C%20Status%2C%20Hostname%2C%20IP%2C%20OS%2C%20Version%2C%20Manager%0A1%2C%20%28O%29%2C%20myserver%2C%20182.198.162.1%2C%20RedHat%2C%206.1%2C%20KIM%20JONG%20IL</text>
       </controlProperties>
     </control>
     <control controlID="16" controlTypeID="com.balsamiq.mockups::Label" x="217" y="201" w="-1" h="-1" measuredW="35" measuredH="21" zOrder="5" locked="false" isInGroup="-1">

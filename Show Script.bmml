@@ -32,35 +32,46 @@
         <text>Script%20Type</text>
       </controlProperties>
     </control>
-    <control controlID="6" controlTypeID="com.balsamiq.mockups::Label" x="151" y="322" w="100" h="-1" measuredW="87" measuredH="21" zOrder="5" locked="false" isInGroup="-1">
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Label" x="151" y="290" w="100" h="-1" measuredW="87" measuredH="21" zOrder="5" locked="false" isInGroup="-1">
       <controlProperties>
         <align>left</align>
         <text>Script%20Context</text>
       </controlProperties>
     </control>
-    <control controlID="7" controlTypeID="com.balsamiq.mockups::TextInput" x="241" y="227" w="872" h="-1" measuredW="79" measuredH="27" zOrder="6" locked="false" isInGroup="-1"/>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::TextInput" x="241" y="227" w="872" h="-1" measuredW="145" measuredH="27" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Disk%20Information%20Show</text>
+      </controlProperties>
+    </control>
     <control controlID="9" controlTypeID="com.balsamiq.mockups::ComboBox" x="241" y="257" w="872" h="-1" measuredW="59" measuredH="27" zOrder="7" locked="false" isInGroup="-1">
       <controlProperties>
         <text>bash</text>
       </controlProperties>
     </control>
-    <control controlID="10" controlTypeID="com.balsamiq.mockups::TextArea" x="241" y="322" w="873" h="361" measuredW="200" measuredH="140" zOrder="8" locked="false" isInGroup="-1"/>
-    <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="69" y="157" w="-1" h="-1" measuredW="172" measuredH="36" zOrder="9" locked="false" isInGroup="-1">
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::TextArea" x="241" y="290" w="873" h="361" measuredW="200" measuredH="140" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%21%23/bin/sh%0A%20%0Adf%20-k%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="69" y="157" w="-1" h="-1" measuredW="152" measuredH="36" zOrder="9" locked="false" isInGroup="-1">
       <controlProperties>
         <size>28</size>
-        <text>Create%20Script</text>
+        <text>Show%20Script</text>
       </controlProperties>
     </control>
-    <control controlID="13" controlTypeID="com.balsamiq.mockups::Label" x="151" y="292" w="100" h="-1" measuredW="71" measuredH="21" zOrder="10" locked="false" isInGroup="-1">
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::Label" x="151" y="660" w="100" h="-1" measuredW="59" measuredH="21" zOrder="10" locked="false" isInGroup="-1">
       <controlProperties>
         <align>left</align>
-        <text>Script%20Level</text>
+        <text>Create%20By</text>
       </controlProperties>
     </control>
-    <control controlID="14" controlTypeID="com.balsamiq.mockups::ComboBox" x="241" y="289" w="872" h="-1" measuredW="72" measuredH="27" zOrder="11" locked="false" isInGroup="-1">
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::TextInput" x="241" y="657" w="872" h="-1" measuredW="79" measuredH="27" zOrder="11" locked="false" isInGroup="-1"/>
+    <control controlID="15" controlTypeID="com.balsamiq.mockups::Label" x="151" y="693" w="100" h="-1" measuredW="72" measuredH="21" zOrder="12" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>ADMIN</text>
+        <align>left</align>
+        <text>Create%20Date</text>
       </controlProperties>
     </control>
+    <control controlID="16" controlTypeID="com.balsamiq.mockups::TextInput" x="241" y="690" w="872" h="-1" measuredW="79" measuredH="27" zOrder="13" locked="false" isInGroup="-1"/>
   </controls>
 </mockup>
