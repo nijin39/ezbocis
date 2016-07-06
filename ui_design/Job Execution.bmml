@@ -1,0 +1,35 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1280" measuredH="1028" mockupW="1280" mockupH="1024">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="0" y="4" w="1280" h="1024" measuredW="0" measuredH="0" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>A%20Web%20Page%0Ahttp%3A//www.ezbocis.com/job</text>
+        <value>0</value>
+        <verticalScrollbar>true</verticalScrollbar>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::MenuBar" x="0" y="95" w="1264" h="29" measuredW="0" measuredH="0" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>HOME%2CSERVER%2CSCRIPT%2CAUDIT%2CJOB</text>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Paragraph" x="0" y="73" w="106" h="33" measuredW="0" measuredH="0" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>center</align>
+        <bold>true</bold>
+        <size>20</size>
+        <text>EZBOCIS</text>
+      </controlProperties>
+    </control>
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="69" y="157" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>28</size>
+        <text>JOB%20History</text>
+      </controlProperties>
+    </control>
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::DataGrid" x="217" y="253" w="930" h="408" measuredW="0" measuredH="0" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>NO%2C%20Job%20Name%2C%20Script%2C%20Devices%2C%20Start%2C%20End%2C%20Execution%20By%0A1%2C%20Check%20Disk%2C%20Disk%20Information%2C%20159%2C%202016/07/05%2021%3A00%2C2016/07/06%2022%3A00%2CKim%20Jong%20IL</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

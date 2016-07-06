@@ -59,6 +59,60 @@
         <text>Remove</text>
       </controlProperties>
     </control>
-    <control controlID="45" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="279" y="220" w="681" h="535" measuredW="0" measuredH="0" zOrder="12" locked="false" isInGroup="-1"/>
+    <control controlID="45" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="280" y="157" w="681" h="398" measuredW="0" measuredH="0" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>A%20Web%20Page%0Ahttp%3A//www.ezbocis.com/registration%3FserverId%3Dtemp001</text>
+      </controlProperties>
+    </control>
+    <control controlID="46" controlTypeID="com.balsamiq.mockups::Label" x="318" y="279" w="100" h="-1" measuredW="0" measuredH="0" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>left</align>
+        <text>SERVER%20IP</text>
+      </controlProperties>
+    </control>
+    <control controlID="47" controlTypeID="com.balsamiq.mockups::Label" x="318" y="349" w="100" h="-1" measuredW="0" measuredH="0" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>left</align>
+        <text>ID</text>
+      </controlProperties>
+    </control>
+    <control controlID="48" controlTypeID="com.balsamiq.mockups::TextInput" x="408" y="276" w="427" h="-1" measuredW="0" measuredH="0" zOrder="15" locked="false" isInGroup="-1"/>
+    <control controlID="49" controlTypeID="com.balsamiq.mockups::ComboBox" x="408" y="311" w="427" h="-1" measuredW="0" measuredH="0" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>SSH</text>
+      </controlProperties>
+    </control>
+    <control controlID="50" controlTypeID="com.balsamiq.mockups::Label" x="318" y="383" w="100" h="-1" measuredW="0" measuredH="0" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>left</align>
+        <text>PASSWORD</text>
+      </controlProperties>
+    </control>
+    <control controlID="52" controlTypeID="com.balsamiq.mockups::Label" x="318" y="314" w="100" h="-1" measuredW="0" measuredH="0" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>left</align>
+        <text>PROTOCOL</text>
+      </controlProperties>
+    </control>
+    <control controlID="53" controlTypeID="com.balsamiq.mockups::TextInput" x="408" y="346" w="427" h="-1" measuredW="0" measuredH="0" zOrder="19" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>root</text>
+      </controlProperties>
+    </control>
+    <control controlID="54" controlTypeID="com.balsamiq.mockups::TextInput" x="407" y="380" w="427" h="-1" measuredW="0" measuredH="0" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>imsi00</text>
+      </controlProperties>
+    </control>
+    <control controlID="55" controlTypeID="com.balsamiq.mockups::Button" x="495" y="438" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="21" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Cancel</text>
+      </controlProperties>
+    </control>
+    <control controlID="56" controlTypeID="com.balsamiq.mockups::Button" x="681" y="438" w="-1" h="-1" measuredW="0" measuredH="0" zOrder="22" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Install</text>
+      </controlProperties>
+    </control>
   </controls>
 </mockup>
