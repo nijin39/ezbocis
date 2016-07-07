@@ -20,20 +20,21 @@
         <text>EZBOCIS</text>
       </controlProperties>
     </control>
-    <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="69" y="157" w="-1" h="-1" measuredW="113" measuredH="36" zOrder="3" locked="false" isInGroup="-1">
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="69" y="157" w="-1" h="-1" measuredW="160" measuredH="36" zOrder="3" locked="false" isInGroup="-1">
       <controlProperties>
         <size>28</size>
-        <text>JOB%20List</text>
+        <text>Create%20JOB%20</text>
       </controlProperties>
     </control>
-    <control controlID="17" controlTypeID="com.balsamiq.mockups::DataGrid" x="217" y="253" w="930" h="408" measuredW="670" measuredH="51" zOrder="4" locked="false" isInGroup="-1">
+    <control controlID="18" controlTypeID="com.balsamiq.mockups::DataGrid" x="167" y="224" w="930" h="408" measuredW="456" measuredH="81" zOrder="4" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>NO%2C%20Job%20Name%2C%20Script%2C%20Devices%2C%20Start%2C%20End%2C%20Execution%20By%2C%20Status%0A1%2C%20Check%20Disk%2C%20Disk%20Information%2C%20159%2C%202016/07/05%2021%3A00%2C2016/07/06%2022%3A00%2CKim%20Jong%20IL%2C%20100/159</text>
+        <text>NO%2C%20Status%2C%20Hostname%2C%20IP%2C%20OS%2C%20Version%2C%20Manager%0A1%2C%20%5BX%5D%2C%20myserver%2C%20182.198.162.1%2C%20RedHat%2C%206.1%2C%20KIM%20JONG%20IL%0A2%2C%20%5B%5D%2C%20myserver2%2C182.198.162.2%2C%20RedHat%2C%206.1%2C%20KIM%20JONG%20IL</text>
       </controlProperties>
     </control>
-    <control controlID="18" controlTypeID="com.balsamiq.mockups::Button" x="1082" y="209" w="-1" h="-1" measuredW="65" measuredH="27" zOrder="5" locked="false" isInGroup="-1">
+    <control controlID="19" controlTypeID="com.balsamiq.mockups::Label" x="997" y="163" w="-1" h="-1" measuredW="100" measuredH="24" zOrder="5" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Create</text>
+        <size>16</size>
+        <text>select%20Server</text>
       </controlProperties>
     </control>
   </controls>
