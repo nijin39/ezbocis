@@ -16,7 +16,7 @@ JSON SAMPLE CODE
 '''
 @app.route("/restful")
 def restTest():
-	dic = {'name':'pey', 'phone':'010990303', 'bitrh': '1118'}
+	dic = {'name' : 'pey', 'phone' : '010990303', 'bitrh' : '1118'}
 	return jsonify(results=dic)
 
 @app.route("/index")
