@@ -23,6 +23,10 @@ def restTest():
 def index():
 	return render_template("index.html")
 
+@app.route("/test")
+def test():
+	return render_template("test.html")
+
 @app.route("/remote")
 def remote():
 	return render_template("remote.html")
