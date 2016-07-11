@@ -27,9 +27,9 @@ def index():
 def test():
 	return render_template("test.html")
 
-@app.route("/remote")
+@app.route("/script")
 def remote():
-	return render_template("remote.html")
+	return render_template("script.html")
 
 @app.route('/hello', methods=['POST'])
 def saveScript():
