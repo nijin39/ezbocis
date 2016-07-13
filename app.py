@@ -23,6 +23,14 @@ def restTest():
 def index():
 	return render_template("index.html")
 
+@app.route("/serverList")
+def serverList():
+	return render_template("serverList.html")
+
+@app.route("/serverRegistration")
+def serverRegistration():
+	return render_template("serverRegistration.html")
+
 @app.route("/test")
 def test():
 	return render_template("test.html")
