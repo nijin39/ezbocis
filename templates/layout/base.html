@@ -22,10 +22,25 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="/index">Home</a></li>
-            <li><a href="/script">Script</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="/index">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Server<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">List</a></li>
+                <li><a href="#">Registration</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Script<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">List</a></li>
+                <li><a href="#">Create</a></li>
+              </ul>
+            </li>
+
+            <li><a href="/job">Job</a></li>
+            <li><a href="/ezcontrol">EZControl</a></li>
+            <li><a href="/admin">Admin</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
               <ul class="dropdown-menu">
@@ -40,9 +55,8 @@
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="../navbar/">Default</a></li>
-            <li><a href="../navbar-static-top/">Static top</a></li>
-            <li class="active"><a href="./">Fixed top <span class="sr-only">(current)</span></a></li>
+            <li><a href="../navbar/">Profile</a></li>
+            <li><a href="../navbar-static-top/">Logout</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
