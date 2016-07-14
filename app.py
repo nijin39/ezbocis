@@ -19,9 +19,9 @@ def restTest():
 	dic = {'name' : 'pey', 'phone' : '010990303', 'bitrh' : '1118'}
 	return jsonify(results=dic)
 
-@app.route("/index")
+@app.route("/home")
 def index():
-	return render_template("index.html")
+	return render_template("home.html")
 
 @app.route("/serverList")
 def serverList():
