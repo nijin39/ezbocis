@@ -3,13 +3,14 @@ from flask import jsonify
 from flask import Response
 from flask import request
 from flask import url_for
+from flask import redirect
 from flask import render_template
 import os
 app = Flask(__name__)
 
 @app.route("/")
 def hello():
-	return "HEELO WORLD!!!!"
+	return render_template("home.html")
 
 '''
 JSON SAMPLE CODE
@@ -23,6 +24,9 @@ def restTest():
 def index():
 	return render_template("home.html")
 
+'''
+Server Service
+'''
 @app.route("/serverList")
 def serverList():
 	return render_template("serverList.html")
@@ -31,6 +35,13 @@ def serverList():
 def serverRegistration():
 	return render_template("serverRegistration.html")
 
+'''
+Script Service
+'''
+@app.route("/scriptList")
+def scriptList():
+	return render_template("scriptList.html")
+	
 @app.route("/test")
 def test():
 	return render_template("test.html")
