@@ -42,6 +42,10 @@ Script Service
 def scriptList():
 	return render_template("scriptList.html")
 	
+@app.route("/scriptRegistration")
+def scriptRegistration():
+	return render_template("scriptRegistration.html")
+	
 @app.route("/test")
 def test():
 	return render_template("test.html")
