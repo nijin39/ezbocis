@@ -1,0 +1,64 @@
+{% extends "layout/base.html" %}
+{% block title %}SSA COLLECT{% endblock %}
+{% block head %}
+    {{ super() }}
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet"/>
+    <script>
+    function sendMacAddress() {
+    	$.get("/sendMacAddress", function(data, status){
+//             alert("Data: " + data + "\nStatus: " + status);
+		$("#myModal").modal()
+        });
+    }
+    
+    function sendMacAddress10Times() {
+    	$.get("/sendMacAddress10Times", function(data, status){
+//             alert("Data: " + data + "\nStatus: " + status);
+		$("#myModal").modal()
+        });
+    }
+    </script>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-4">
+			<button onclick="sendMacAddress()" type="button" class="btn btn-primary btn-md pull-right">One Mac Send</button>
+		</div>
+		
+		<div class="col-md-5">
+			<form class="form-inline">
+			  <div class="form-group">
+			    <label for="email">MAC address:</label>
+			    <input type="email" class="form-control" id="email">
+			  </div>
+			  <button type="submit" class="btn btn-primary btn-md">Send</button>
+			</form>
+		</div>
+		
+        <div class="col-md-3">
+			<button onclick="sendMacAddress10Times()" type="button" class="btn btn-primary btn-md pull-left">Ten Mac Send</button>
+		</div>
+		</div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">데이터 전송 상태</h4>
+        </div>
+        <div class="modal-body">
+          <p>성공적으로 전송되었습니다.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+{% endblock %}

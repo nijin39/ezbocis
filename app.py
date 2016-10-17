@@ -5,61 +5,114 @@ from flask import request
 from flask import url_for
 from flask import redirect
 from flask import render_template
+from flask import session
+import json
+import requests
 import os
+import random
+from httplib import responses
+import time
+
 app = Flask(__name__)
+app.secret_key = "super secret key"
+app.config.from_pyfile('config.properties')
 
 @app.route("/")
-def hello():
-	return render_template("home.html")
-
-'''
-JSON SAMPLE CODE
-'''
-@app.route("/restful")
-def restTest():
-	dic = {'name' : 'pey', 'phone' : '010990303', 'bitrh' : '1118'}
-	return jsonify(results=dic)
+def index():
+    return home()
 
 @app.route("/home")
-def index():
-	return render_template("home.html")
-
-'''
-Server Service
-'''
-@app.route("/serverList")
-def serverList():
-	return render_template("serverList.html")
-
-@app.route("/serverRegistration")
-def serverRegistration():
-	return render_template("serverRegistration.html")
-
-'''
-Script Service
-'''
-@app.route("/scriptList")
-def scriptList():
-	return render_template("scriptList.html")
+def home():
+	if verify():
+	    return render_template("home.html")
+	else:
+		return login()
 	
-@app.route("/scriptRegistration")
-def scriptRegistration():
-	return render_template("scriptRegistration.html")
+@app.route("/collect")
+def collect():
+	if verify():
+		return render_template("collect.html")
+	else:
+		return login() 
+
+@app.route("/sendMacAddress", methods=['GET'])	
+def sendMacAddress():
+	if verify():
+		payload = {}
+		url = app.config['MAC_URL']
+		payload['timestamp'] = time.time()
+		payload['mac'] = MACprettyprint(randomMAC())
+
+		headers = {
+	    'content-type': "application/json",
+	    'authorization': "Bearer "+session['accessToken'],
+	    'cache-control': "no-cache",
+	    }
+		response = requests.request("POST", url, data=json.dumps(payload), headers=headers, verify=False)
+		return response.text
+	else:
+		return login()
+
+@app.route("/login", methods=['GET'])
+def login():
+	if verify():
+		return index()
+	else:
+		return render_template('login.html')
+       
+
+@app.route("/logout")
+def logout():
+	session.clear()
+	return login()
+
+@app.route('/login', methods=['POST'])
+def do_admin_login():
+    if ( authrity(request.form['username'],request.form['password']) ):
+        session['logged_in'] = True
+        for value in session:
+        	print(value, session[value])
+    else:
+        return login()
+    return index()
+   
+def verify():
+	if not session.get('logged_in'):
+		return False
+	else:
+		return True
 	
-@app.route("/test")
-def test():
-	return render_template("test.html")
+def authrity(username, password):
+	url = app.config['APIGW_URL']+"/token"
+	payload = "grant_type=password&username=" +username+ "&password=" +password
+	headers = {
+    'authorization': "Basic " + app.config['CONSUMER'],
+    'content-type': "application/x-www-form-urlencoded",
+    'cache-control': "no-cache"
+    }
+	response = requests.request("POST", url, data=payload, headers=headers, verify=False)
+	tokenResponse = json.loads(response.text)
+	try:	
+		
+		accessToken = tokenResponse['access_token']
+		expiresIn = tokenResponse['expires_in']
+		session['accessToken'] = accessToken
+		
+		if accessToken and expiresIn > 10:
+		    return True
+		else:
+		    return False
+	except:
+		return False
 
-@app.route("/script")
-def remote():
-	return render_template("script.html")
+def randomMAC():
+    return [ 0x00, 0x16, 0x3e,
+        random.randint(0x00, 0x7f),
+        random.randint(0x00, 0xff),
+        random.randint(0x00, 0xff) ]
 
-@app.route('/hello', methods=['POST'])
-def saveScript():
-    scriptTitle=request.form['scriptTitle']
-    scriptContent=request.form['scriptContent']
-    print(scriptTitle,scriptContent)
-    return render_template('view-script.html', scriptTitle=scriptTitle, scriptContent=scriptContent)
-
+def MACprettyprint(mac):
+    return ':'.join(map(lambda x: "%02x" % x, mac))
+    
 if __name__ == "__main__":
 	app.run(host='0.0.0.0', port=int(os.getenv('PORT',8080)), debug=True)
