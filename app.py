@@ -12,6 +12,11 @@ import os
 import random
 from httplib import responses
 import time
+import binascii
+import sys
+
+sys.path.append("../SHSM")
+import aes
 
 app = Flask(__name__)
 app.secret_key = "super secret key"
@@ -34,7 +39,89 @@ def collect():
 		return render_template("collect.html")
 	else:
 		return login() 
+        
+@app.route("/shsm")
+def shsm():
+    if verify():
+        return render_template("shsm.html")
+    else:
+        return login() 
+    
+@app.route("/mkeygen", methods=['POST'])
+def masterkeygen():
+    if verify():
+        payload = {}
+        url = app.config['MASTER_KEY_GEN_URL']
 
+        headers = {
+        'content-type': "application/json",
+        'authorization': "Bearer "+session['accessToken'],
+        'cache-control': "no-cache",
+        }
+        
+
+        response = requests.request("POST", url, headers=headers, verify=False)
+        print(response.text)
+        return response.text
+    else:
+        return login()
+
+@app.route("/keygen")
+def keygen():
+    return aes.make_key()
+
+@app.route("/message/encrypt", methods=['POST'])
+def encryptMessage():
+    content = request.json
+    print content['key']
+    print content['message']
+    return aes.encrypt_message(content['key'], content['message'])
+
+@app.route("/message/decrypt", methods=['POST'])
+def decryptMessage():
+    content = request.json
+    print content['key']
+    print content['message']
+    return aes.decrypt_message(content['key'], content['message'])
+
+@app.route("/key/encrypt", methods=['POST'])
+def encryptKey():
+    content = request.json
+    if verify():
+        payload = {}
+        url = app.config['AES_URL']
+        payload['type'] = content['type']
+        payload['data'] = content['data']
+
+        headers = {
+        'content-type': "application/json",
+        'authorization': "Bearer "+session['accessToken'],
+        'cache-control': "no-cache",
+        }
+        response = requests.request("POST", url, data=json.dumps(payload), headers=headers, verify=False)
+        return response.text
+    else:
+        return login()
+
+@app.route("/key/decrypt", methods=['POST'])
+def decryptKey():
+    content = request.json
+    if verify():
+        payload = {}
+        url = app.config['AES_URL']
+        payload['type'] = content['type']
+        payload['data'] = content['data']
+
+        headers = {
+        'content-type': "application/json",
+        'authorization': "Bearer "+session['accessToken'],
+        'cache-control': "no-cache",
+        }
+        response = requests.request("POST", url, data=json.dumps(payload), headers=headers, verify=False)
+        return response.text
+    else:
+        return login()
+    
 @app.route("/sendMacAddress", methods=['GET'])	
 def sendMacAddress():
 	if verify():
@@ -131,6 +218,8 @@ def randomMAC():
 
 def MACprettyprint(mac):
     return ':'.join(map(lambda x: "%02x" % x, mac))
+
+
     
 if __name__ == "__main__":
 	app.run(host='0.0.0.0', port=int(os.getenv('PORT',8080)), debug=True)

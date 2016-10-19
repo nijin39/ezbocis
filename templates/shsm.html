@@ -1,0 +1,198 @@
+{% extends "layout/base.html" %}
+{% block title %}SSA COLLECT{% endblock %}
+{% block head %}
+    {{ super() }}
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+			<button onclick="masterkeygen()" type="button" class="btn btn-primary btn-md pull-left">WBC Table(Master Key) Generate</button>
+		</div>
+	</div>
+	<br/>
+    <div class="row">
+        <div class="col-md-5">
+			<div class="form-group">
+			  <label for="comment">Source:</label>
+			  <textarea class="form-control" rows="14" id="source"></textarea>
+			</div>
+		</div>
+		
+		<div class="col-md-2 text-center">
+		        <br/> <br/>
+				<button onclick="encrypt()" type="button" class="btn btn-primary btn-md">Encrypt</button> <br/><br/>
+				<button onclick="keysend()" type="button" class="btn btn-primary btn-md">Request Encrypt Key</button>
+				 <br/> <br/> <br/>
+				<button onclick="decrypt()" type="button" class="btn btn-primary btn-md">Decrypt</button> <br/><br/>
+				<button onclick="decryptkey()" type="button" class="btn btn-primary btn-md">Request Decrypt Key</button>
+		</div>
+        <div class="col-md-5">
+			<div class="form-group">
+			  <label for="comment">Encrypt:</label>
+			  <textarea class="form-control" rows="14" id="encrypt"></textarea>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">	
+		<div class="col-md-5">
+			<form class="form-inline">
+			  <div class="form-group">
+			    <label for="key"> Key : </label>
+			    <input type="text" class="form-control" id="key">
+			  </div>
+			</form>
+		</div>
+		
+		<div class="col-md-2"></div>
+		
+		<div class="col-md-5">
+			<form class="form-inline">
+			  <div class="form-group">
+			    <label for="encryptkey"> Encrypt Key : </label>
+			    <input type="text" class="form-control" id="encryptkey">
+			  </div>
+			</form>
+		</div>
+	</div>
+	
+</div> 
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">데이터 전송 상태</h4>
+        </div>
+        <div class="modal-body">
+          <p>성공적으로 전송되었습니다.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div> 
+{% endblock %}
+
+{% block jscript %}
+<script>
+function encrypt() {
+	var text = $('#source').val();
+	
+	$.get("/keygen", function(data, status){
+		$('#key').val(data);
+	 }).done(function() {
+			var key = $('#key').val()
+			var keymessage={key: key, message: text}
+
+			var settings = {
+					  "async": true,
+					  "url": "/message/encrypt",
+					  "method": "POST",
+					  "headers": {
+					    "content-type": "application/json",
+					  },
+					  "processData": false,
+		              "data": JSON.stringify(keymessage)
+					}
+
+			$.ajax(settings).done(function (data) {
+				$('#encrypt').val(data);
+			}); 
+	  });
+	
+
+
+}
+
+function decrypt() {
+// 	var text = $('#encrypt').val();
+// 	console.log(text);
+// 	$('#encrypt').val("");
+// 	$('#source').val(text);
+	
+	var key = $('#key').val()
+	var text = $("#encrypt").val()
+	var keymessage={key: key, message: text}
+
+	var settings = {
+			  "async": true,
+			  "url": "/message/decrypt",
+			  "method": "POST",
+			  "headers": {
+			    "content-type": "application/json",
+			  },
+			  "processData": false,
+              "data": JSON.stringify(keymessage)
+			}
+
+	$.ajax(settings).done(function (data) {
+		$('#source').val(data);
+		$('#encrypt').val("");
+	}); 
+	
+}
+
+function keysend() {
+	var key = $('#key').val()
+	var sourcekey={type: 'encrypt', data: key}
+	var settings = {
+			  "async": true,
+			  "url": "/key/encrypt",
+			  "method": "POST",
+			  "headers": {
+			    "content-type": "application/json",
+			  },
+			  "processData": false,
+              "data": JSON.stringify(sourcekey)
+			}
+	$.ajax(settings).done(function (data) {
+		var obj = jQuery.parseJSON(data);
+		$('#encryptkey').val(obj.result);
+		$('#source').val("");
+		$('#key').val("");
+	}); 
+}
+
+function decryptkey() {
+	var key = $('#encryptkey').val();
+	var sourcekey={type: 'decrypt', data: key}
+	var settings = {
+			  "async": true,
+			  "url": "/key/decrypt",
+			  "method": "POST",
+			  "headers": {
+			    "content-type": "application/json",
+			  },
+			  "processData": false,
+              "data": JSON.stringify(sourcekey)
+			}
+	$.ajax(settings).done(function (data) {
+		var obj = jQuery.parseJSON(data);
+		$('#key').val(obj.result);
+		$('#encryptkey').val("");
+	}); 
+}
+
+function masterkeygen(){
+    $.ajax({
+        type: "POST",
+        url: "/mkeygen",
+        dataType: "json",
+        success: function () {
+            alert("Success MasterKey Creation")
+        }
+    });
+}
+
+</script>
+{% endblock %}
