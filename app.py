@@ -48,10 +48,28 @@ def sendMacAddress():
 	    'authorization': "Bearer "+session['accessToken'],
 	    'cache-control': "no-cache",
 	    }
+        
+
 		response = requests.request("POST", url, data=json.dumps(payload), headers=headers, verify=False)
 		return response.text
 	else:
 		return login()
+
+@app.route("/macs", methods=['GET'])
+def macList():
+    if verify():
+        url = app.config['MACLIST_URL']
+
+        headers = {
+        'content-type': "application/json",
+        'authorization': "Bearer "+session['accessToken'],
+        'cache-control': "no-cache",
+        }
+        response = requests.request("GET", url, headers=headers, verify=False)
+        print('{"data":'+response.text+"}")
+        return '{"data":'+response.text+"}"
+    else:
+        return login()
 
 @app.route("/login", methods=['GET'])
 def login():

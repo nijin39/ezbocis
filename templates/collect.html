@@ -8,6 +8,7 @@
     function sendMacAddress() {
     	$.get("/sendMacAddress", function(data, status){
 //             alert("Data: " + data + "\nStatus: " + status);
+        console.log(status)
 		$("#myModal").modal()
         });
     }
@@ -39,7 +40,30 @@
         <div class="col-md-3">
 			<button onclick="sendMacAddress10Times()" type="button" class="btn btn-primary btn-md pull-left">Ten Mac Send</button>
 		</div>
-		</div>
+	</div>
+	
+	<br/>
+	
+	<div class="row">
+		<table id="example" class="display" cellspacing="0" width="100%">
+	        <thead>
+	            <tr>
+	                <th>Tenant</th>
+	                <th>Create Date</th>
+	                <th>Mac Address</th>
+	                <th>Email</th>
+	            </tr>
+	        </thead>
+	        <tfoot>
+	            <tr>
+	                <th>Tenant</th>
+	                <th>Create Date</th>
+	                <th>Mac Address</th>
+	                <th>Email</th>
+	            </tr>
+	        </tfoot>
+	    </table>
+	</div>
 
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
@@ -61,4 +85,25 @@
       
     </div>
   </div>
+{% endblock %}
+
+{% block jscript %}
+<script>
+
+$(document).ready(function() {
+    $('#example').DataTable( {
+        "ajax": {
+            "url": "/macs",
+            "dataSrc": "data"
+        },
+        "columns": [
+            { "data": "tenant_id" },
+            { "data": "create_time" },
+            { "data": "macaddress" },
+            { "data": "user_id" }
+        ]
+    } );
+} );
+</script>
+
 {% endblock %}
