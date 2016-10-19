@@ -17,7 +17,7 @@
         <div class="col-md-5">
 			<div class="form-group">
 			  <label for="comment">Source:</label>
-			  <textarea class="form-control" rows="14" id="source"></textarea>
+			  <textarea class="form-control" rows="16" id="source"></textarea>
 			</div>
 		</div>
 		
@@ -32,7 +32,7 @@
         <div class="col-md-5">
 			<div class="form-group">
 			  <label for="comment">Encrypt:</label>
-			  <textarea class="form-control" rows="14" id="encrypt"></textarea>
+			  <textarea class="form-control" rows="16" id="encrypt"></textarea>
 			</div>
 		</div>
 	</div>
@@ -109,17 +109,9 @@ function encrypt() {
 				$('#encrypt').val(data);
 			}); 
 	  });
-	
-
-
 }
 
 function decrypt() {
-// 	var text = $('#encrypt').val();
-// 	console.log(text);
-// 	$('#encrypt').val("");
-// 	$('#source').val(text);
-	
 	var key = $('#key').val()
 	var text = $("#encrypt").val()
 	var keymessage={key: key, message: text}

@@ -61,7 +61,6 @@ def masterkeygen():
         
 
         response = requests.request("POST", url, headers=headers, verify=False)
-        print(response.text)
         return response.text
     else:
         return login()
@@ -73,15 +72,11 @@ def keygen():
 @app.route("/message/encrypt", methods=['POST'])
 def encryptMessage():
     content = request.json
-    print content['key']
-    print content['message']
     return aes.encrypt_message(content['key'], content['message'])
 
 @app.route("/message/decrypt", methods=['POST'])
 def decryptMessage():
     content = request.json
-    print content['key']
-    print content['message']
     return aes.decrypt_message(content['key'], content['message'])
 
 @app.route("/key/encrypt", methods=['POST'])
@@ -157,11 +152,73 @@ def macList():
         return '{"data":'+response.text+"}"
     else:
         return login()
+    
+def tenants():
+    if verify():
+        url = app.config['TENANTS_URL']
+
+        headers = {
+        'content-type': "application/json",
+        'authorization': "Bearer "+session['accessToken'],
+        'cache-control': "no-cache",
+        }
+        response = requests.request("GET", url, headers=headers, verify=False)
+        tenants = json.loads(response.text)['tenants']
+        if( len(tenants) == 0):
+            return "ERROR"
+        elif ( len(tenants) == 1):
+            return "ONLY"
+        else:
+            return render_template('tenants.html', tenants=tenants)
+    else:
+        return login()
+    
+@app.route("/tenants/<tenantName>")
+def getAccessToken(tenantName):
+    url = app.config["TOKEN_URL"]
+
+    payload = "grant_type=client_credentials&scope=apim%3Asubscribe"
+    headers = {
+    'authorization': "Basic "+app.config['CONSUMER'],
+    'cache-control': "no-cache",
+    'content-type': "application/x-www-form-urlencoded"
+    }
+
+    response = requests.request("POST", url, data=payload, headers=headers, verify=False)
+    
+    accessToken = json.loads(response.text)["access_token"]
+    
+    url = app.config["APPLICATION_LIST_URL"]
+
+    payload = "grant_type=client_credentials&scope=apim%3Asubscribe"
+    headers = {
+    'authorization': "Bearer "+accessToken ,
+    'cache-control': "no-cache",
+    }
+
+    response = requests.request("GET", url, data=payload, headers=headers, verify=False)
+    
+    applications = json.loads(response.text)['list']
+    for application in applications:
+        if application['name'] == tenantName:
+            applicationId = application['applicationId']
+            
+    url = app.config["APPLICATION_URL"]+applicationId
+
+    payload = "grant_type=client_credentials&scope=apim%3Asubscribe"
+    headers = {
+    'authorization': "Bearer "+accessToken ,
+    'cache-control': "no-cache",
+    }
+
+    response = requests.request("GET", url, data=payload, headers=headers, verify=False)
+    print(json.loads(response.text)['keys'][0]['token']['accessToken'])
+    return tenantName+accessToken+response.text
 
 @app.route("/login", methods=['GET'])
 def login():
 	if verify():
-		return index()
+		return tenants()
 	else:
 		return render_template('login.html')
        
@@ -175,11 +232,9 @@ def logout():
 def do_admin_login():
     if ( authrity(request.form['username'],request.form['password']) ):
         session['logged_in'] = True
-        for value in session:
-        	print(value, session[value])
     else:
         return login()
-    return index()
+    return tenants()
    
 def verify():
 	if not session.get('logged_in'):
@@ -198,11 +253,9 @@ def authrity(username, password):
 	response = requests.request("POST", url, data=payload, headers=headers, verify=False)
 	tokenResponse = json.loads(response.text)
 	try:	
-		
 		accessToken = tokenResponse['access_token']
 		expiresIn = tokenResponse['expires_in']
 		session['accessToken'] = accessToken
-		
 		if accessToken and expiresIn > 10:
 		    return True
 		else:
@@ -219,7 +272,5 @@ def randomMAC():
 def MACprettyprint(mac):
     return ':'.join(map(lambda x: "%02x" % x, mac))
 
-
-    
 if __name__ == "__main__":
 	app.run(host='0.0.0.0', port=int(os.getenv('PORT',8080)), debug=True)
