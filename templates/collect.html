@@ -5,13 +5,6 @@
     <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet"/>
     <script>
-    function sendMacAddress() {
-    	$.get("/sendMacAddress", function(data, status){
-//             alert("Data: " + data + "\nStatus: " + status);
-        console.log(status)
-		$("#myModal").modal()
-        });
-    }
     
     function sendMacAddress10Times() {
     	$.get("/sendMacAddress10Times", function(data, status){
@@ -76,7 +69,7 @@
           <h4 class="modal-title">데이터 전송 상태</h4>
         </div>
         <div class="modal-body">
-          <p>성공적으로 전송되었습니다.</p>
+          <p id="message">성공적으로 전송되었습니다.</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -99,27 +92,6 @@ $(document).ready(function() {
 		$("#message").text("정상적으로 로그인이 완료되었습니다.")
 		$("#mymodal").modal();
 		
-// 		var settings = {
-// 				  "async": true,
-// 				  "crossDomain": true,
-// 				  "url": "https://52.198.181.5:8243/ssa/v.1.0/macs",
-// 				  "method": "GET",
-// 				  "headers": {
-// 				    "content-type": "application/json",
-// 				    "authorization": "Bearer c4cc9478-3c64-3cb2-bf79-cba875a8da43",
-// 				    "cache-control": "no-cache",
-// 				    "Access-Control-Allow-Origin" : "http://52.198.181.5",
-// 				    	"Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-// 				    	"Access-Control-Allow-Headers": "X-PINGOTHER, Content-Type",
-// 				    	"Access-Control-Max-Age": "86400"
-// 				  },
-// 				  "processData": false,
-// 				}
-
-// 		$.ajax(settings).done(function (response) {
-// 		  console.log(response);
-// 		});
-
 		console.log(accessToken);
 		
 		$('#example').DataTable({
@@ -138,10 +110,42 @@ $(document).ready(function() {
 	        ]
 	    });
 	});
-
-	
-   
 });
+
+function genMAC(){
+    var hexDigits = "0123456789ABCDEF";
+    var macAddress = "";
+    for (var i = 0; i < 6; i++) {
+        macAddress+=hexDigits.charAt(Math.round(Math.random() * 15));
+        macAddress+=hexDigits.charAt(Math.round(Math.random() * 15));
+        if (i != 5) macAddress += ":";
+    }
+    return macAddress;
+}
+
+function sendMacAddress() {
+	var date = new Date();
+    var unixTimeStamp = date.getTime();
+    var macDate = {timestamp : unixTimeStamp, mac : genMAC()};
+	var settings = {
+			  "async": true,
+			  "crossDomain": true,
+			  "url": "https://52.198.181.5:8243/ssa/v.1.0/mac",
+			  "method": "POST",
+			  "headers": {
+			    "content-type": "application/json",
+			    "authorization": "Bearer "+accessToken,
+			    "Access-Control-Allow-Origin": "*"
+			  },
+			  "processData": false,
+			  "data": JSON.stringify(macDate)
+			}
+
+			$.ajax(settings).done(function (response) {
+				$("#message").text("정상적으로 DATA를 전송하였습니다.");
+				$("#myModal").modal();
+	});
+}
 </script>
 
 {% endblock %}
