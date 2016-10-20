@@ -61,7 +61,7 @@
 	
 </div> 
 
-  <!-- Modal -->
+    <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
     
@@ -72,7 +72,7 @@
           <h4 class="modal-title">데이터 전송 상태</h4>
         </div>
         <div class="modal-body">
-          <p>성공적으로 전송되었습니다.</p>
+          <p id="message"></p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -80,11 +80,22 @@
       </div>
       
     </div>
-  </div> 
+  </div>
 {% endblock %}
 
 {% block jscript %}
+
 <script>
+$(document).ready(function() {
+	$("#message").text("로딩 중입니다.")
+	$("#myModal").modal();
+	$.get("/tenants/{{tenant}}", function(data, status){
+		accessToken = data;
+		console.log(accessToken);
+		$('#myModal').modal('hide');
+	})
+});
+
 function encrypt() {
 	var text = $('#source').val();
 	
@@ -180,8 +191,14 @@ function masterkeygen(){
         type: "POST",
         url: "/mkeygen",
         dataType: "json",
-        success: function () {
-            alert("Success MasterKey Creation")
+        success: function (data) {
+        	if( data == '403'){
+        		$("#message").text("권한이 필요합니다.")
+        		$("#myModal").modal();
+        	} else {
+	    		$("#message").text("정상적으로 DATA를 전송하였습니다.")
+	    		$("#myModal").modal();
+        	}
         }
     });
 }

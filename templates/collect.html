@@ -17,21 +17,15 @@
 {% block content %}
     <div class="row">
         <div class="col-md-4">
-			<button onclick="sendMacAddress()" type="button" class="btn btn-primary btn-md pull-right">One Mac Send</button>
+			
 		</div>
 		
-		<div class="col-md-5">
-			<form class="form-inline">
-			  <div class="form-group">
-			    <label for="email">MAC address:</label>
-			    <input type="email" class="form-control" id="email">
-			  </div>
-			  <button type="submit" class="btn btn-primary btn-md">Send</button>
-			</form>
+		<div class="col-md-4 text-center">
+			<button onclick="sendMacAddress()" type="button" class="btn btn-primary btn-md">One Mac Send</button>
 		</div>
 		
-        <div class="col-md-3">
-			<button onclick="sendMacAddress10Times()" type="button" class="btn btn-primary btn-md pull-left">Ten Mac Send</button>
+        <div class="col-md-4">
+			
 		</div>
 	</div>
 	
@@ -78,37 +72,63 @@
       
     </div>
   </div>
+  
+    <!-- Modal -->
+  <div class="modal fade" id="myModal2" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">데이터 전송 상태</h4>
+        </div>
+        <div class="modal-body">
+          <p id="message2">성공적으로 전송되었습니다.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
 {% endblock %}
 
 {% block jscript %}
 <script>
 
 var accessToken = "";
+var dt = "";
 
 $(document).ready(function() {
+	$("#message").text("로딩 중입니다.");
+	$("#myModal").modal();
 	$.get("/tenants/{{tenant}}", function(data, status){
 		accessToken = data;
 	}).done(function() {
-		$("#message").text("정상적으로 로그인이 완료되었습니다.")
-		$("#mymodal").modal();
+		$('#myModal').modal('hide');
+			
+		dt = $('#example').DataTable({
+		    "ajax": {
+		        "url": "https://52.198.181.5:8243/ssa/v.1.0/macs",
+		        "dataSrc": "data",
+		        "beforeSend": function (request) {
+		            request.setRequestHeader("authorization", "Bearer "+accessToken);
+		        },
+		        "error": function(result){
+		        	$("#message2").text("권한이 필요합니다.");
+		        	$("#myModal2").modal();
+		        }
+		    },
+		    "columns": [
+		        { "data": "tenant_id" },
+		        { "data": "create_time" },
+		        { "data": "macaddress" },
+		        { "data": "user_id" }
+		    ]
+		});
 		
-		console.log(accessToken);
-		
-		$('#example').DataTable({
-	        "ajax": {
-	            "url": "https://52.198.181.5:8243/ssa/v.1.0/macs",
-	            "dataSrc": "data",
-	            'beforeSend': function (request) {
-	                request.setRequestHeader("authorization", "Bearer "+accessToken);
-	            }
-	        },
-	        "columns": [
-	            { "data": "tenant_id" },
-	            { "data": "create_time" },
-	            { "data": "macaddress" },
-	            { "data": "user_id" }
-	        ]
-	    });
 	});
 });
 
@@ -144,6 +164,7 @@ function sendMacAddress() {
 			$.ajax(settings).done(function (response) {
 				$("#message").text("정상적으로 DATA를 전송하였습니다.");
 				$("#myModal").modal();
+				dt.ajax.reload();
 	});
 }
 </script>

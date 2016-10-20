@@ -6,6 +6,7 @@ from flask import url_for
 from flask import redirect
 from flask import render_template
 from flask import session
+from flask import abort
 from datetime import timedelta
 import json
 import requests
@@ -60,7 +61,7 @@ def collect():
 @app.route("/shsm")
 def shsm():
     if verify():
-        return render_template("shsm.html")
+        return render_template("shsm.html",tenant=TENANT)
     else:
         return login() 
     
@@ -78,6 +79,10 @@ def masterkeygen():
         
 
         response = requests.request("POST", url, headers=headers, verify=False)
+        
+        if( response.status_code == 403):
+            return "403"
+
         return response.text
     else:
         return login()
@@ -165,7 +170,6 @@ def macList():
         'cache-control': "no-cache",
         }
         response = requests.request("GET", url, headers=headers, verify=False)
-        print('{"data":'+response.text+"}")
         return '{"data":'+response.text+"}"
     else:
         return login()
@@ -184,7 +188,7 @@ def tenants():
         if( len(tenants) == 0):
             return "ERROR"
         elif ( len(tenants) == 1):
-            return "ONLY"
+            return render_template('tenants.html', tenants=tenants)
         else:
             return render_template('tenants.html', tenants=tenants)
     else:
@@ -203,20 +207,17 @@ def getAccessToken(tenantName):
 
     response = requests.request("POST", url, data=payload, headers=headers, verify=False)
     
-    print(response.text)
-    
     accessToken = json.loads(response.text)["access_token"]
     
     url = app.config["APPLICATION_LIST_URL"]
 
-    #payload = "grant_type=password&username="+USERNAME+"&password="+PASSWORD+"&scope=apim%3Asubscribe"
     headers = {
     'authorization': "Bearer "+accessToken ,
     'cache-control': "no-cache", 
     }
 
     response = requests.request("GET", url, data=payload, headers=headers, verify=False)
-
+    print(response.text)
     
     applications = json.loads(response.text)['list']
     for application in applications:
@@ -238,25 +239,16 @@ def getAccessToken(tenantName):
             consumer = key['consumerKey']+":"+key['consumerSecret']
             
     url = app.config["TOKEN_URL"]
-
     payload = "grant_type=password&username="+USERNAME+"&password="+PASSWORD
     headers = {
     'authorization': "Basic "+base64.b64encode(consumer),
     'cache-control': "no-cache",
     'content-type': "application/x-www-form-urlencoded"
     }
-    
-    print("USERNAME :"+USERNAME)
-    print("PASSWORD :"+PASSWORD)
-    print("BASE64 :"+base64.b64encode(consumer))
-    
     response = requests.request("POST", url, data=payload, headers=headers, verify=False)
-    
-    print(response.text)
-    
     accessToken = json.loads(response.text)["access_token"]
-
-    return json.loads(response.text)["access_token"]
+    session['accessToken'] = accessToken
+    return accessToken
 
 @app.route("/login", methods=['GET'])
 def login():
@@ -282,7 +274,7 @@ def do_admin_login():
     else:
         return login()
     return tenants()
-   
+
 def verify():
 	if not session.get('logged_in'):
 		return False
