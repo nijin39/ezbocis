@@ -14,6 +14,7 @@ from httplib import responses
 import time
 import binascii
 import sys
+import base64
 
 sys.path.append("../SHSM")
 import aes
@@ -21,6 +22,11 @@ import aes
 app = Flask(__name__)
 app.secret_key = "super secret key"
 app.config.from_pyfile('config.properties')
+
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(minutes=60)
 
 @app.route("/")
 def index():
@@ -32,11 +38,20 @@ def home():
 	    return render_template("home.html")
 	else:
 		return login()
+        
+@app.route("/home/<tenant>")
+def tenantHome(tenant):
+    global TENANT;
+    TENANT = tenant
+    if verify():
+        return render_template("home.html", tenant=tenant)
+    else:
+        return login()
 	
 @app.route("/collect")
 def collect():
 	if verify():
-		return render_template("collect.html")
+		return render_template("collect.html",tenant=TENANT)
 	else:
 		return login() 
         
@@ -177,7 +192,7 @@ def tenants():
 def getAccessToken(tenantName):
     url = app.config["TOKEN_URL"]
 
-    payload = "grant_type=client_credentials&scope=apim%3Asubscribe"
+    payload = "grant_type=password&username="+app.config['SUBSCRIPTION_USER']+"&password="+app.config['SUBSCRIPTION_PASSWORD']+"&scope=apim%3Asubscribe"
     headers = {
     'authorization': "Basic "+app.config['CONSUMER'],
     'cache-control': "no-cache",
@@ -186,17 +201,20 @@ def getAccessToken(tenantName):
 
     response = requests.request("POST", url, data=payload, headers=headers, verify=False)
     
+    print(response.text)
+    
     accessToken = json.loads(response.text)["access_token"]
     
     url = app.config["APPLICATION_LIST_URL"]
 
-    payload = "grant_type=client_credentials&scope=apim%3Asubscribe"
+    #payload = "grant_type=password&username="+USERNAME+"&password="+PASSWORD+"&scope=apim%3Asubscribe"
     headers = {
     'authorization': "Bearer "+accessToken ,
-    'cache-control': "no-cache",
+    'cache-control': "no-cache", 
     }
 
     response = requests.request("GET", url, data=payload, headers=headers, verify=False)
+
     
     applications = json.loads(response.text)['list']
     for application in applications:
@@ -212,8 +230,31 @@ def getAccessToken(tenantName):
     }
 
     response = requests.request("GET", url, data=payload, headers=headers, verify=False)
-    print(json.loads(response.text)['keys'][0]['token']['accessToken'])
-    return tenantName+accessToken+response.text
+
+    for key in json.loads(response.text)['keys']:
+        if key['keyType'] == 'PRODUCTION':
+            consumer = key['consumerKey']+":"+key['consumerSecret']
+            
+    url = app.config["TOKEN_URL"]
+
+    payload = "grant_type=password&username="+USERNAME+"&password="+PASSWORD
+    headers = {
+    'authorization': "Basic "+base64.b64encode(consumer),
+    'cache-control': "no-cache",
+    'content-type': "application/x-www-form-urlencoded"
+    }
+    
+    print("USERNAME :"+USERNAME)
+    print("PASSWORD :"+PASSWORD)
+    print("BASE64 :"+base64.b64encode(consumer))
+    
+    response = requests.request("POST", url, data=payload, headers=headers, verify=False)
+    
+    print(response.text)
+    
+    accessToken = json.loads(response.text)["access_token"]
+
+    return json.loads(response.text)["access_token"]
 
 @app.route("/login", methods=['GET'])
 def login():
@@ -230,6 +271,10 @@ def logout():
 
 @app.route('/login', methods=['POST'])
 def do_admin_login():
+    global USERNAME
+    global PASSWORD
+    USERNAME=request.form['username']
+    PASSWORD=request.form['password']
     if ( authrity(request.form['username'],request.form['password']) ):
         session['logged_in'] = True
     else:

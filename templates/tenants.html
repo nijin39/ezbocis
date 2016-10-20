@@ -1,29 +1,33 @@
-{% extends "layout/base.html" %}
+{% extends "layout/login.html" %}
 {% block title %}SSA HOME{% endblock %}
 {% block head %}
     {{ super() }}
 
 {% endblock %}
 {% block content %}
-<div class="row">
-  <div class="col-md-4">
-  </div>
-  <div class="col-md-4">
+<div class="container">
 
-<div class="list-group">
-      <a href="#" class="list-group-item disabled">Tenants</a>
-	  {% for tenant in tenants %}
-      <a href="/tenants/{{tenant}}" class="list-group-item">{{tenant}}</a>
-  	  {% endfor %}
+	<br/> <br/> <br/>
+
+	<div class="row">
+	  <div class="col-md-4">
+	  </div>
+	  <div class="col-md-4">
+	
+	<div class="list-group">
+	      <a href="#" class="list-group-item disabled">Tenants</a>
+		  {% for tenant in tenants %}
+	      <a href="/home/{{tenant}}" class="list-group-item">{{tenant}}</a>
+	  	  {% endfor %}
+	</div>
+	
+	
+	
+	  </div>
+	  <div class="col-md-4">
+	  </div>
+	</div>
 </div>
-
-
-
-  </div>
-  <div class="col-md-4">
-  </div>
-</div>
-
 
 
 
