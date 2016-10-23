@@ -6,38 +6,22 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet"/>
 {% endblock %}
 {% block content %}
-    <div class="row">
-        <div class="col-md-4">
-			
-		</div>
-		
-		<div class="col-md-4 text-center">
-			<button onclick="sendMacAddress()" type="button" class="btn btn-primary btn-md">One Mac Send</button>
-		</div>
-		
-        <div class="col-md-4">
-			
-		</div>
-	</div>
-	
-	<br/>
-	
 	<div class="row">
 		<table id="example" class="display" cellspacing="0" width="100%">
 	        <thead>
 	            <tr>
-	                <th>Tenant</th>
-	                <th>Create Date</th>
-	                <th>Mac Address</th>
-	                <th>Email</th>
+	                <th>ID</th>
+	                <th>Hostname</th>
+	                <th>Interface ID</th>
+	                <th>IP</th>
 	            </tr>
 	        </thead>
 	        <tfoot>
 	            <tr>
-	                <th>Tenant</th>
-	                <th>Create Date</th>
-	                <th>Mac Address</th>
-	                <th>Email</th>
+	                <th>ID</th>
+	                <th>Hostname</th>
+	                <th>Interface ID</th>
+	                <th>IP</th>
 	            </tr>
 	        </tfoot>
 	    </table>
@@ -102,62 +86,24 @@ $(document).ready(function() {
 			
 		dt = $('#example').DataTable({
 		    "ajax": {
-		        "url": "https://52.198.181.5:8243/ssa/v.1.0/macs",
+		        "url": "/servers-data",
 		        "dataSrc": "data",
-		        "beforeSend": function (request) {
-		            request.setRequestHeader("authorization", "Bearer "+accessToken);
-		        },
 		        "error": function(result){
 		        	$("#message2").text("권한이 필요합니다.");
 		        	$("#myModal2").modal();
 		        }
 		    },
 		    "columns": [
-		        { "data": "tenant_id" },
-		        { "data": "create_time" },
-		        { "data": "macaddress" },
-		        { "data": "user_id" }
+		        { "data": "hostid" },
+		        { "data": "hostname" },
+		        { "data": "interfaceid" },
+		        { "data": "ip" }
 		    ]
 		});
 		
 	});
 });
 
-function genMAC(){
-    var hexDigits = "0123456789ABCDEF";
-    var macAddress = "";
-    for (var i = 0; i < 6; i++) {
-        macAddress+=hexDigits.charAt(Math.round(Math.random() * 15));
-        macAddress+=hexDigits.charAt(Math.round(Math.random() * 15));
-        if (i != 5) macAddress += ":";
-    }
-    return macAddress;
-}
-
-function sendMacAddress() {
-	var date = new Date();
-    var unixTimeStamp = date.getTime();
-    var macDate = {timestamp : unixTimeStamp, mac : genMAC()};
-	var settings = {
-			  "async": true,
-			  "crossDomain": true,
-			  "url": "https://52.198.181.5:8243/ssa/v.1.0/mac",
-			  "method": "POST",
-			  "headers": {
-			    "content-type": "application/json",
-			    "authorization": "Bearer "+accessToken,
-			    "Access-Control-Allow-Origin": "*"
-			  },
-			  "processData": false,
-			  "data": JSON.stringify(macDate)
-			}
-
-			$.ajax(settings).done(function (response) {
-				$("#message").text("정상적으로 DATA를 전송하였습니다.");
-				$("#myModal").modal();
-				dt.ajax.reload();
-	});
-}
 </script>
 
 {% endblock %}

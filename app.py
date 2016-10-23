@@ -38,16 +38,23 @@ def index():
 @app.route("/home")
 def home():
 	if verify():
-	    return render_template("home.html")
+	    return render_template("home.html", tenant=TENANT)
 	else:
 		return login()
-        
+
+@app.route("/servers")
+def servers():
+    if verify():
+        return render_template("servers.html", tenant=TENANT)
+    else:
+        return login()
+            
 @app.route("/home/<tenant>")
 def tenantHome(tenant):
     global TENANT;
     TENANT = tenant
     if verify():
-        return render_template("home.html", tenant=tenant)
+        return render_template("home.html", tenant=TENANT)
     else:
         return login()
 	
@@ -173,6 +180,39 @@ def macList():
         return '{"data":'+response.text+"}"
     else:
         return login()
+    
+@app.route("/servers-data", methods=['GET'])
+def serverList():
+    if verify():
+        url = "http://52.198.181.5:8280/52.198.233.67/zabbix/v1.0.0/api_jsonrpc.php"
+
+        payload = "{\n    \"jsonrpc\": \"2.0\",\n    \"method\": \"host.get\",\n    \"params\": {\n        \"output\": [\n            \"hostid\",\n            \"host\"\n        ],\n        \"selectInterfaces\": [\n            \"interfaceid\",\n            \"ip\"\n        ]\n    },\n    \"id\": 2,\n    \"auth\": \"fe4882ab2f43471323fb2f1c93df5fcd\"\n}\n"
+        headers = {
+            'authorization': "Bearer 4b378bcc-020e-3840-aad5-361543e8eaaa",
+            'content-type': "application/json",
+            'cache-control': "no-cache",
+        }
+        response = requests.request("POST", url, data=payload, headers=headers)
+        
+        servers_json = json.loads(response.text)
+        servers_grid=[]
+        grid_data = {}
+        
+        
+        for server in servers_json['result']:
+            servers_list = {}
+            servers_list['hostname'] = server['host']
+            servers_list['hostid'] = server['hostid']
+            for interface in server['interfaces']:
+                servers_list['interfaceid'] = interface['interfaceid']
+                servers_list['ip'] = interface['ip']
+            servers_grid.append(servers_list)
+        grid_data['data'] = servers_grid
+        print(json.dumps(grid_data))
+        return json.dumps(grid_data)
+    else:
+        return login()
+        
     
 def tenants():
     if verify():
