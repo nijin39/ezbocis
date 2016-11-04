@@ -1,0 +1,111 @@
+{% extends "layout/base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-2">
+	</div>
+	<div class="col-md-8 text-center">
+	    <button onclick="showNetworkInfo()" type="button" class="btn btn-primary btn-md">Get Network Info</button>
+            <button onclick="showDiskInfo()" type="button" class="btn btn-primary btn-md">Get Disk Info</button>
+	</div>
+		
+        <div class="col-md-2">
+	</div>
+    </div>
+	
+	<br/>
+
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-8 text-center">
+            <div class="form-group">
+                <label for="comment">Result</label>
+                <textarea class="form-control" rows="15" id="cmdresult"></textarea>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+        </div>
+    </div>
+
+	
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">데이터 전송 상태</h4>
+        </div>
+        <div class="modal-body">
+          <p id="message">성공적으로 전송되었습니다.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+{% endblock %}
+
+{% block jscript %}
+<script>
+
+$(document).ready(function() {
+});
+
+function showNetworkInfo() {
+    var date = new Date();
+    var unixTimeStamp = date.getTime();
+
+    var settings = {
+      "async": true,
+      "crossDomain": true,
+      "url": "http://www.ezbocis.com:5000/job/networkinfo",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+      },
+      "processData": false,
+      "data": "{\n\t\"id\":\"0001\",\n\t\"script\":\"ifconfig\",\n\t\"type\":\"bat\"\n}"
+    }
+
+    $.ajax(settings).done(function (response) {
+      $('#cmdresult').val(response);
+    });
+   }
+
+function showDiskInfo() {
+    var date = new Date();
+    var unixTimeStamp = date.getTime();
+
+    var settings = {
+      "async": true,
+      "crossDomain": true,
+      "url": "http://www.ezbocis.com:5000/job/diskinfo",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+      },
+      "processData": false,
+      "data": "{\n\t\"id\":\"0001\",\n\t\"script\":\"ifconfig\",\n\t\"type\":\"bat\"\n}"
+    }
+
+    $.ajax(settings).done(function (response) {
+      $('#cmdresult').val(response);
+    });
+   }
+
+</script>
+
+{% endblock %}
